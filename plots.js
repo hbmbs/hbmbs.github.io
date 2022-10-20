@@ -59,12 +59,18 @@ function buildCharts(sample) {
       var samples = data.samples;
       // 4. Create a variable that filters the samples for the object with the desired sample number.
       var sampleArray = samples.filter(item => item.id == sample);
+      // Create a variable that filters the metadata array for the object with the desired sample number.
+      var metadata = data.metadata;
       //  5. Create a variable that holds the first sample in the array.
       var first_sample = sampleArray[0];
+      // Create a variable that holds the first sample in the metadata array.
+      var first_meta = metadata[0];
       // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
       var ids = first_sample.otu_ids;
       var labels = first_sample.otu_labels;
       var values = first_sample.sample_values;
+      // Create a variable that holds the washing frequency.
+      var washingFreq = parseInt(metaResult.wfreq);
       // 7. Create the yticks for the bar chart.
       // Hint: Get the the top 10 otu_ids and map them in descending order  
       //  so the otu_ids with the most bacteria are last. 
@@ -111,14 +117,45 @@ function buildCharts(sample) {
       // 2. Create the layout for the bubble chart.
       var bubbleLayout = {
         title: 'Bacteria Cultures per Sample',
-        margin: { t: 0 },
+        //margin: { t: 0 },
         xaxis: { title: "OTU ID" },
+        showlegend: false,
         hovermode: "closest"   
       };
-  
-      // 3. Use Plotly to plot the data with the layout.
-      Plotly.newPlot("bubble", bubbleData, bubbleLayout); 
-    });
+
+      Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+
+      //---------------------------------
+      // GAUGE CHART
+      //---------------------------------
+
+      // 4. Create the trace for the gauge chart.
+      var gaugeData = [{
+        value: washingFreq,
+        title: {text: "Belly Button Washing Frequency<br>Scrubs per Week"},
+        type: "indicator",
+        mode: "gauge+number",
+        gauge: {
+          axis: {range: [0,10]},
+          steps: [
+            {range: [0,2], color:"#ea2c2c"},
+            {range: [2,4], color:"#ea822c"},
+            {range: [4,6], color:"#ee9c00"},
+            {range: [6,8], color:"#eecc00"},
+            {range: [8,10], color:"#d4ee00"}
+          ]
+        }
+      }
+      ];
+      
+      // 5. Create the layout for the gauge chart.
+      var gaugeLayout = { 
+        width: 600, height: 450, margin: {t: 0, b: 0}
+      };
+
+      // 6. Use Plotly to plot the gauge data and layout.
+      Plotly.newPlot("gauge", gaugeData, gaugeLayout);
+  });
 };
 
 // Initialize the dashboard
