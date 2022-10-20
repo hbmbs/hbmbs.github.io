@@ -57,14 +57,16 @@ function buildCharts(sample) {
       d3.json("samples.json").then((data) => {
       // 3. Create a variable that holds the samples array. 
       var samples = data.samples;
+      // Create a variable that holds the metadata array
+      var metadata = data.metadata;
       // 4. Create a variable that filters the samples for the object with the desired sample number.
       var sampleArray = samples.filter(item => item.id == sample);
       // Create a variable that filters the metadata array for the object with the desired sample number.
-      var metadata = data.metadata;
+      var metadata_filtered = metadata.filter(item => item.id == sample);
       //  5. Create a variable that holds the first sample in the array.
       var first_sample = sampleArray[0];
       // Create a variable that holds the first sample in the metadata array.
-      var first_meta = metadata[0];
+      var first_meta = metadata_filtered[0];
       // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
       var ids = first_sample.otu_ids;
       var labels = first_sample.otu_labels;
@@ -84,14 +86,16 @@ function buildCharts(sample) {
           x:values.slice(0,10).reverse(),
           text:labels.slice(0,10).reverse(),
           type:"bar",
-          orientation:"h"
-    
+          marker: {color: 'rgb(245, 167, 66)'},
+          orientation:"h",
         }
       ];
       // 9. Create the layout for the bar chart. 
       var barLayout = {
         title: "Top 10 Bacteria Cultures Found",
-        margin: { t: 30, l: 150 }
+        margin: { t: 30, l: 150 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'
       };
       // 10. Use Plotly to plot the data with the layout. 
       Plotly.newPlot("bar", barData, barLayout);
@@ -120,7 +124,9 @@ function buildCharts(sample) {
         //margin: { t: 0 },
         xaxis: { title: "OTU ID" },
         showlegend: false,
-        hovermode: "closest"   
+        hovermode: "closest", 
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'  
       };
 
       Plotly.newPlot("bubble", bubbleData, bubbleLayout);
@@ -137,6 +143,7 @@ function buildCharts(sample) {
         mode: "gauge+number",
         gauge: {
           axis: {range: [0,10]},
+          bar: { color: "black" },
           steps: [
             {range: [0,2], color:"#ea2c2c"},
             {range: [2,4], color:"#ea822c"},
@@ -150,7 +157,9 @@ function buildCharts(sample) {
       
       // 5. Create the layout for the gauge chart.
       var gaugeLayout = { 
-        width: 600, height: 450, margin: {t: 0, b: 0}
+        width: 600, height: 450, margin: {t: 0, b: 0},
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'
       };
 
       // 6. Use Plotly to plot the gauge data and layout.
