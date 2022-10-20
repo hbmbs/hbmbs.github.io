@@ -70,7 +70,7 @@ function buildCharts(sample) {
       var labels = first_sample.otu_labels;
       var values = first_sample.sample_values;
       // Create a variable that holds the washing frequency.
-      var washingFreq = parseInt(metaResult.wfreq);
+      var washingFreq = parseFloat(first_meta.wfreq);
       // 7. Create the yticks for the bar chart.
       // Hint: Get the the top 10 otu_ids and map them in descending order  
       //  so the otu_ids with the most bacteria are last. 
